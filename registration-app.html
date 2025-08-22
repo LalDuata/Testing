@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SDEO Aizawl West Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #87CEEB 0%, #4FB3D9 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4FB3D9 0%, #2E86AB 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            display: flex;
+            min-height: 500px;
+        }
+
+        .form-section {
+            flex: 1;
+            padding: 20px;
+        }
+
+        .records-section {
+            flex: 1;
+            background: #f8f9fa;
+            padding: 20px;
+            border-left: 1px solid #e9ecef;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 15px;
+        }
+
+        .form-col {
+            flex: 1;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #4FB3D9;
+            box-shadow: 0 0 0 3px rgba(79, 179, 217, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4FB3D9 0%, #2E86AB 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 179, 217, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .records-header {
+            margin-bottom: 25px;
+        }
+
+        .records-header h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .record-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        .record-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .record-name {
+            font-weight: 600;
+            font-size: 1.2em;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .record-designation {
+            color: #4FB3D9;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .record-address {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8em;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        .record-count {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+            display: none;
+        }
+
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 15px;
+            padding: 0;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow: hidden;
+            transform: scale(0.7);
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #4FB3D9 0%, #2E86AB 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.3em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-field {
+            margin-bottom: 12px;
+        }
+
+        .modal-field label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-field-value {
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border-left: 4px solid #4FB3D9;
+            font-size: 1em;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .modal-field-value.address {
+            white-space: pre-line;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.edit {
+            background: #28a745;
+            color: white;
+        }
+
+        .modal-btn.edit:hover {
+            background: #218838;
+            transform: translateY(-1px);
+        }
+
+        .modal-btn.delete {
+            background: #dc3545;
+            color: white;
+        }
+
+        .modal-btn.delete:hover {
+            background: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .record-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .record-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .records-section {
+                border-left: none;
+                border-top: 1px solid #e9ecef;
+            }
+            
+            .form-section, .records-section {
+                padding: 15px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .form-col {
+                margin-bottom: 15px;
+            }
+            
+            .form-col:last-child {
+                margin-bottom: 0;
+            }
+            
+            .modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+            
+            .modal-body {
+                padding: 15px;
+                max-height: 70vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 SDEO Aizawl West Registration</h1>
+            <p>Sub Divisional Education Officer - Registration System</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-section">
+                <div class="success-message" id="successMessage">
+                    Registration successful! ✅
+                </div>
+                
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label for="name">Name *</label>
+                        <input type="text" id="name" name="name" required placeholder="Enter full name">
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="gender">Gender *</label>
+                            <select id="gender" name="gender" required>
+                                <option value="">Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-col">
+                            <label for="dateOfBirth">Date of Birth *</label>
+                            <input type="date" id="dateOfBirth" name="dateOfBirth" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fatherName">Father's Name *</label>
+                        <input type="text" id="fatherName" name="fatherName" required placeholder="Enter father's name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="personalAddress">Personal Address *</label>
+                        <textarea id="personalAddress" name="personalAddress" required placeholder="Enter complete personal address"></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="educationalQualification">Educational Qualification *</label>
+                            <input type="text" id="educationalQualification" name="educationalQualification" required placeholder="e.g., B.A., M.A., B.Ed., etc.">
+                        </div>
+                        <div class="form-col">
+                            <label for="subjectTaught">Subject Taught *</label>
+                            <select id="subjectTaught" name="subjectTaught" required>
+                                <option value="">Select subject</option>
+                                <option value="Maths">Maths</option>
+                                <option value="Science">Science</option>
+                                <option value="English">English</option>
+                                <option value="G.K">G.K</option>
+                                <option value="Hindi">Hindi</option>
+                                <option value="S.S">S.S</option>
+                                <option value="Art">Art</option>
+                                <option value="Mizo">Mizo</option>
+                                <option value="Multiple Subject">Multiple Subject</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="designation">Designation *</label>
+                            <select id="designation" name="designation" required>
+                                <option value="">Select designation</option>
+                                <option value="Headmaster">Headmaster</option>
+                                <option value="Teacher">Teacher</option>
+                                <option value="Hindi Teacher">Hindi Teacher</option>
+                                <option value="WE Teacher">WE Teacher</option>
+                                <option value="IV Grade">IV Grade</option>
+                                <option value="Casual Teacher">Casual Teacher</option>
+                                <option value="FS Helper">FS Helper</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-col">
+                            <label for="status">Status *</label>
+                            <select id="status" name="status" required>
+                                <option value="">Select status</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Samagra">Samagra</option>
+                                <option value="CSS">CSS</option>
+                                <option value="P.E">P.E</option>
+                                <option value="Contract">Contract</option>
+                                <option value="M.R">M.R</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="form-group">
+                        <label for="nameOfWorkplace">Name of School *</label>
+                        <select id="nameOfWorkplace" name="nameOfWorkplace" required>
+                            <option value="">Select workplace/school</option>
+                            <option value="AICS Junior School">AICS Junior School</option>
+                            <option value="AICS Junior MS">AICS Junior MS</option>
+                            <option value="Assam Rifle PS">Assam Rifle PS</option>
+                            <option value="Assam Rifle MS (Deficit)">Assam Rifle MS (Deficit)</option>
+                            <option value="Bawlte UPS">Bawlte UPS</option>
+                            <option value="Central Jail UPS">Central Jail UPS</option>
+                            <option value="Chhinlung Academy">Chhinlung Academy</option>
+                            <option value="Chungtlang MS (Aided)">Chungtlang MS (Aided)</option>
+                            <option value="Dawrpui MS (Deficit)">Dawrpui MS (Deficit)</option>
+                            <option value="Gov.t. PS, Ailawng">Gov.t. PS, Ailawng</option>
+                            <option value="Gov.t. PS, Ainawn">Gov.t. PS, Ainawn</option>
+                            <option value="Gov.t. PS, Bawlte">Gov.t. PS, Bawlte</option>
+                            <option value="Govt. PS, Bawngthah">Govt. PS, Bawngthah</option>
+                            <option value="Govt. PS, Central Jail">Govt. PS, Central Jail</option>
+                            <option value="Govt. PS, Chanmari West">Govt. PS, Chanmari West</option>
+                            <option value="Govt. PS, Chawlhhmun">Govt. PS, Chawlhhmun</option>
+                            <option value="Govt. PS, Chawnpui">Govt. PS, Chawnpui</option>
+                            <option value="Govt. PS, Chungtlang">Govt. PS, Chungtlang</option>
+                            <option value="Govt. Combine PS, Zarkawt">Govt. Combine PS, Zarkawt</option>
+                            <option value="Govt. PS, Darlung">Govt. PS, Darlung</option>
+                            <option value="Govt. PS, Dawrpui Model">Govt. PS, Dawrpui Model</option>
+                            <option value="Govt. PS, Dawrpui Vengthar">Govt. PS, Dawrpui Vengthar</option>
+                            <option value="Govt. PS - II, Dinthar">Govt. PS - II, Dinthar</option>
+                            <option value="Govt. PS, Edenthar">Govt. PS, Edenthar</option>
+                            <option value="Govt. Gairigaon PS, Dinthar">Govt. Gairigaon PS, Dinthar</option>
+                            <option value="Govt. PS, Hreichuk">Govt. PS, Hreichuk</option>
+                            <option value="Govt. PS, Hunthar">Govt. PS, Hunthar</option>
+                            <option value="Govt. PS, Kanan">Govt. PS, Kanan</option>
+                            <option value="Govt. PS-I, Kanghmun">Govt. PS-I, Kanghmun</option>
+                            <option value="Govt. PS-II, Kanghmun">Govt. PS-II, Kanghmun</option>
+                            <option value="Govt. PS, Khawrihnim">Govt. PS, Khawrihnim</option>
+                            <option value="Govt. LM PS, Chanmari West">Govt. LM PS, Chanmari West</option>
+                            <option value="Govt. PS-I, Lengpui">Govt. PS-I, Lengpui</option>
+                            <option value="Govt. PS-II, Lengpui">Govt. PS-II, Lengpui</option>
+                            <option value="Govt. PS-III, Lengpui">Govt. PS-III, Lengpui</option>
+                            <option value="Govt. PS, Luangmual">Govt. PS, Luangmual</option>
+                            <option value="Govt. PS, Lungphun">Govt. PS, Lungphun</option>
+                            <option value="Govt. Model Eng. Med. Chanmari">Govt. Model Eng. Med. Chanmari</option>
+                            <option value="Govt. Nepali PS, Rangvamual">Govt. Nepali PS, Rangvamual</option>
+                            <option value="Govt. Nepali PS, Tanhril">Govt. Nepali PS, Tanhril</option>
+                            <option value="Govt. Nepali PS, Zotlang">Govt. Nepali PS, Zotlang</option>
+                            <option value="Govt. PS, Phunchawng">Govt. PS, Phunchawng</option>
+                            <option value="Govt. PS, Rangvamual">Govt. PS, Rangvamual</option>
+                            <option value="Govt. PS - I, Reiek">Govt. PS - I, Reiek</option>
+                            <option value="Govt. PS - II, Reiek">Govt. PS - II, Reiek</option>
+                            <option value="Govt. PS, Rulpuihlim">Govt. PS, Rulpuihlim</option>
+                            <option value="Govt. PS - I, Sairang">Govt. PS - I, Sairang</option>
+                            <option value="Govt. PS - II, Sairang">Govt. PS - II, Sairang</option>
+                            <option value="Govt. PS - III, Sairang">Govt. PS - III, Sairang</option>
+                            <option value="Govt. PS - IV, Sairang">Govt. PS - IV, Sairang</option>
+                            <option value="Govt. PS - I, Sakawrtuichhun">Govt. PS - I, Sakawrtuichhun</option>
+                            <option value="Govt. PS - II, Sakawrtuichhun">Govt. PS - II, Sakawrtuichhun</option>
+                            <option value="Govt. PS, South Sabual">Govt. PS, South Sabual</option>
+                            <option value="Govt. PS - I, Tanhril">Govt. PS - I, Tanhril</option>
+                            <option value="Govt. PS - II, Tanhril">Govt. PS - II, Tanhril</option>
+                            <option value="Govt. PS - III, Tanhril">Govt. PS - III, Tanhril</option>
+                            <option value="Govt. PS - I, Tuikual">Govt. PS - I, Tuikual</option>
+                            <option value="Govt. PS - III, Tuikual">Govt. PS - III, Tuikual</option>
+                            <option value="Govt. PS, West Serzawl">Govt. PS, West Serzawl</option>
+                            <option value="Govt. PS, West Lungdar">Govt. PS, West Lungdar</option>
+                            <option value="Govt. PS, Zarkawt">Govt. PS, Zarkawt</option>
+                            <option value="Govt. PS, Zonuam">Govt. PS, Zonuam</option>
+                            <option value="Govt. PS, Zohnuai">Govt. PS, Zohnuai</option>
+                            <option value="Govt. PS, Zotlang">Govt. PS, Zotlang</option>
+                            <option value="Govt. MS, Ailawng">Govt. MS, Ailawng</option>
+                            <option value="Govt. MS, Ainawn">Govt. MS, Ainawn</option>
+                            <option value="Govt. MS, Bawngthah">Govt. MS, Bawngthah</option>
+                            <option value="Govt. MS, Chanmari West">Govt. MS, Chanmari West</option>
+                            <option value="Govt.MS,Chawlhhmun">Govt.MS,Chawlhhmun</option>
+                            <option value="Govt. Model MS, Chawnpui">Govt. Model MS, Chawnpui</option>
+                            <option value="Govt. Combine MS, Zarkawt">Govt. Combine MS, Zarkawt</option>
+                            <option value="Govt. MS, Darlung">Govt. MS, Darlung</option>
+                            <option value="Govt. MS, Dawrpui Vengthar">Govt. MS, Dawrpui Vengthar</option>
+                            <option value="Govt. MS - I, Dinthar">Govt. MS - I, Dinthar</option>
+                            <option value="Govt. MS - II, Dinthar">Govt. MS - II, Dinthar</option>
+                            <option value="Govt. MS , Edenthar">Govt. MS , Edenthar</option>
+                            <option value="Govt. MS , Hunthar">Govt. MS , Hunthar</option>
+                            <option value="Govt. MS , Kanan">Govt. MS , Kanan</option>
+                            <option value="Govt. MS , Kanghmun">Govt. MS , Kanghmun</option>
+                            <option value="Govt. MS , Khawrihnim">Govt. MS , Khawrihnim</option>
+                            <option value="Govt. MS - I, Lengpui">Govt. MS - I, Lengpui</option>
+                            <option value="Govt. MS - II, Lengpui">Govt. MS - II, Lengpui</option>
+                            <option value="Govt. MS , Luangmual">Govt. MS , Luangmual</option>
+                            <option value="Govt. MS, Lungphun">Govt. MS, Lungphun</option>
+                            <option value="Govt. Model Eng. MS,Chanmari">Govt. Model Eng. MS,Chanmari</option>
+                            <option value="Govt. MS, Rangvamual">Govt. MS, Rangvamual</option>
+                            <option value="Govt. MS, Reiek">Govt. MS, Reiek</option>
+                            <option value="Govt. Modern MS, Reiek">Govt. Modern MS, Reiek</option>
+                            <option value="Govt. MS, Rulpuihlim">Govt. MS, Rulpuihlim</option>
+                            <option value="Govt. Modern MS, Sairang">Govt. Modern MS, Sairang</option>
+                            <option value="Govt. MS, Sairang">Govt. MS, Sairang</option>
+                            <option value="Govt. MS, Sakawrtuichhun">Govt. MS, Sakawrtuichhun</option>
+                            <option value="Govt. MS, South Sabual">Govt. MS, South Sabual</option>
+                            <option value="Govt. MS - I, Tanhrill">Govt. MS - I, Tanhrill</option>
+                            <option value="Govt. MS - II, Tanhrill">Govt. MS - II, Tanhrill</option>
+                            <option value="Govt. MS, Tuikual North">Govt. MS, Tuikual North</option>
+                            <option value="Govt. MS, Tuikual South">Govt. MS, Tuikual South</option>
+                            <option value="Govt. MS, Vaivakawn">Govt. MS, Vaivakawn</option>
+                            <option value="Govt. MS, West Lungdar">Govt. MS, West Lungdar</option>
+                            <option value="Govt. MS, West Serzawl">Govt. MS, West Serzawl</option>
+                            <option value="Govt. MS, Zonuam">Govt. MS, Zonuam</option>
+                            <option value="Govt. MS, Zotlang">Govt. MS, Zotlang</option>
+                            <option value="Hreichuk UPS">Hreichuk UPS</option>
+                            <option value="Modern English School">Modern English School</option>
+                            <option value="Peniel PS">Peniel PS</option>
+                            <option value="Phunchawng UPS">Phunchawng UPS</option>
+                            <option value="Presbyterian English School">Presbyterian English School</option>
+                            <option value="Presbyterian English School, Dawrpui">Presbyterian English School, Dawrpui</option>
+                            <option value="Sairang Sihhmui UPS">Sairang Sihhmui UPS</option>
+                            <option value="Sairang Dinthar (Adhoc)">Sairang Dinthar (Adhoc)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="workAddress">Work Address *</label>
+                        <textarea id="workAddress" name="workAddress" required placeholder="Enter complete work address"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="managementOfSchool">Management of School *</label>
+                        <select id="managementOfSchool" name="managementOfSchool" required>
+                            <option value="">Select management type</option>
+                            <option value="Govt.">Govt.</option>
+                            <option value="Deficit">Deficit</option>
+                            <option value="Adhoc Aided">Adhoc Aided</option>
+                            <option value="Lumpsum Aided">Lumpsum Aided</option>
+                            <option value="Samagra">Samagra</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-col">
+                            <label for="dateOfAppointment">Date of Appointment to Service *</label>
+                            <input type="date" id="dateOfAppointment" name="dateOfAppointment" required>
+                        </div>
+                        <div class="form-col">
+                            <label for="dateOfJoining">Date of joining to Present Post *</label>
+                            <input type="date" id="dateOfJoining" name="dateOfJoining" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="remark">Remark</label>
+                        <textarea id="remark" name="remark" placeholder="Enter any remarks or additional information"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobileNo">Mobile No. *</label>
+                        <input type="tel" id="mobileNo" name="mobileNo" required placeholder="Enter mobile number" pattern="[0-9]{10}" title="Please enter a valid 10-digit mobile number">
+                    </div>
+                    
+                    <button type="submit" class="btn">Register Now</button>
+                </form>
+            </div>
+            
+            <div class="records-section">
+                <div class="records-header">
+                    <h2>📊 Registered Users</h2>
+                    <p class="record-count">Total: <span id="recordCount">0</span></p>
+                </div>
+                
+                <div id="recordsList">
+                    <div class="empty-state">
+                        No registrations yet. Be the first to register! 🚀
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for viewing individual records -->
+    <div class="modal-overlay" id="recordModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">👤 User Details</h3>
+                <button class="modal-close" onclick="app.closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-field">
+                    <label>Name</label>
+                    <div class="modal-field-value" id="modalName"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Gender</label>
+                    <div class="modal-field-value" id="modalGender"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Father's Name</label>
+                    <div class="modal-field-value" id="modalFatherName"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Personal Address</label>
+                    <div class="modal-field-value address" id="modalPersonalAddress"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Date of Birth</label>
+                    <div class="modal-field-value" id="modalDateOfBirth"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Educational Qualification</label>
+                    <div class="modal-field-value" id="modalEducationalQualification"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Subject Taught</label>
+                    <div class="modal-field-value" id="modalSubjectTaught"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Designation</label>
+                    <div class="modal-field-value" id="modalDesignation"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Status</label>
+                    <div class="modal-field-value" id="modalStatus"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Name of School</label>
+                    <div class="modal-field-value" id="modalNameOfWorkplace"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Work Address</label>
+                    <div class="modal-field-value address" id="modalWorkAddress"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Management of School</label>
+                    <div class="modal-field-value" id="modalManagementOfSchool"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Date of Appointment to Service</label>
+                    <div class="modal-field-value" id="modalDateOfAppointment"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Date of joining to Present Post</label>
+                    <div class="modal-field-value" id="modalDateOfJoining"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Remark</label>
+                    <div class="modal-field-value address" id="modalRemark"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Mobile No.</label>
+                    <div class="modal-field-value" id="modalMobileNo"></div>
+                </div>
+                <div class="modal-field">
+                    <label>Registration Date</label>
+                    <div class="modal-field-value" id="modalDate"></div>
+                </div>
+                <div class="modal-actions">
+                    <button class="modal-btn edit" onclick="app.editRecord()" id="editBtn" style="width: 100%;">
+                        ✏️ Edit Record
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class RegistrationApp {
+            constructor() {
+                this.records = this.loadRecords();
+                this.currentRecord = null;
+                this.initializeEventListeners();
+                this.renderRecords();
+                this.updateRecordCount();
+            }
+
+            initializeEventListeners() {
+                // Form submission
+                document.getElementById('registrationForm').addEventListener('submit', (e) => {
+                    this.handleSubmit(e);
+                });
+
+                // Designation change handler
+                document.getElementById('designation').addEventListener('change', (e) => {
+                    this.handleDesignationChange(e);
+                });
+
+                // Modal close on overlay click
+                document.getElementById('recordModal').addEventListener('click', (e) => {
+                    if (e.target.id === 'recordModal') {
+                        this.closeModal();
+                    }
+                });
+
+                // Keyboard shortcuts for modal
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.closeModal();
+                    }
+                });
+            }
+
+            handleDesignationChange(e) {
+                // No custom designation handling needed
+            }
+
+            handleSubmit(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(e.target);
+                const name = formData.get('name').trim();
+                const gender = formData.get('gender');
+                const fatherName = formData.get('fatherName').trim();
+                const personalAddress = formData.get('personalAddress').trim();
+                const dateOfBirth = formData.get('dateOfBirth');
+                const educationalQualification = formData.get('educationalQualification').trim();
+                const subjectTaught = formData.get('subjectTaught');
+                let designation = formData.get('designation');
+                const status = formData.get('status');
+                const nameOfWorkplace = formData.get('nameOfWorkplace').trim();
+                const workAddress = formData.get('workAddress').trim();
+                const managementOfSchool = formData.get('managementOfSchool');
+                const dateOfAppointment = formData.get('dateOfAppointment');
+                const dateOfJoining = formData.get('dateOfJoining');
+                const remark = formData.get('remark').trim();
+                const mobileNo = formData.get('mobileNo').trim();
+
+                // Validate required fields
+                if (!name || !gender || !fatherName || !personalAddress || !dateOfBirth || !educationalQualification || !subjectTaught || !designation || !status || !nameOfWorkplace || !workAddress || !managementOfSchool || !dateOfAppointment || !dateOfJoining || !mobileNo) {
+                    alert('Please fill in all required fields.');
+                    return;
+                }
+
+                // Validate mobile number
+                if (!/^[0-9]{10}$/.test(mobileNo)) {
+                    alert('Please enter a valid 10-digit mobile number.');
+                    return;
+                }
+
+                // Create new record
+                const newRecord = {
+                    id: Date.now(),
+                    name: name,
+                    gender: gender,
+                    fatherName: fatherName,
+                    personalAddress: personalAddress,
+                    dateOfBirth: dateOfBirth,
+                    educationalQualification: educationalQualification,
+                    subjectTaught: subjectTaught,
+                    designation: designation,
+                    status: status,
+                    nameOfWorkplace: nameOfWorkplace,
+                    workAddress: workAddress,
+                    managementOfSchool: managementOfSchool,
+                    dateOfAppointment: dateOfAppointment,
+                    dateOfJoining: dateOfJoining,
+                    remark: remark,
+                    mobileNo: mobileNo,
+                    registeredAt: new Date().toLocaleDateString()
+                };
+
+                // Add to records
+                this.records.push(newRecord);
+                this.saveRecords();
+                this.renderRecords();
+                this.updateRecordCount();
+
+                // Show success message
+                this.showSuccessMessage();
+
+                // Reset form
+                e.target.reset();
+            }
+
+            showSuccessMessage() {
+                const successMessage = document.getElementById('successMessage');
+                successMessage.style.display = 'block';
+                
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            }
+
+            renderRecords() {
+                const recordsList = document.getElementById('recordsList');
+                
+                if (this.records.length === 0) {
+                    recordsList.innerHTML = `
+                        <div class="empty-state">
+                            No registrations yet. Be the first to register! 🚀
+                        </div>
+                    `;
+                    return;
+                }
+
+                const recordsHTML = this.records
+                    .sort((a, b) => b.id - a.id) // Show newest first
+                    .map(record => `
+                        <div class="record-card" onclick="app.showRecordModal(${record.id})" title="Click to view details">
+                            <div class="record-name">${this.escapeHtml(record.name)}</div>
+                            <div class="record-designation">${this.escapeHtml(record.designation)}</div>
+                            <div class="record-address">${this.escapeHtml((record.personalAddress || record.address || '').length > 50 ? (record.personalAddress || record.address || '').substring(0, 50) + '...' : (record.personalAddress || record.address || ''))}</div>
+                            <small style="color: #999; font-size: 0.8em;">📅 ${record.registeredAt} • 📱 ${record.mobileNo || 'N/A'} • Click to view details</small>
+                        </div>
+                    `)
+                    .join('');
+
+                recordsList.innerHTML = recordsHTML;
+            }
+
+            showRecordModal(id) {
+                const record = this.records.find(r => r.id === id);
+                if (!record) return;
+
+                this.currentRecord = record;
+                
+                // Populate modal with record data
+                document.getElementById('modalName').textContent = record.name;
+                document.getElementById('modalGender').textContent = record.gender || 'N/A';
+                document.getElementById('modalFatherName').textContent = record.fatherName || 'N/A';
+                document.getElementById('modalPersonalAddress').textContent = record.personalAddress || record.address || 'N/A';
+                document.getElementById('modalDateOfBirth').textContent = record.dateOfBirth || 'N/A';
+                document.getElementById('modalEducationalQualification').textContent = record.educationalQualification || 'N/A';
+                document.getElementById('modalSubjectTaught').textContent = record.subjectTaught || 'N/A';
+                document.getElementById('modalDesignation').textContent = record.designation;
+                document.getElementById('modalStatus').textContent = record.status || 'N/A';
+                document.getElementById('modalNameOfWorkplace').textContent = record.nameOfWorkplace || 'N/A';
+                document.getElementById('modalWorkAddress').textContent = record.workAddress || 'N/A';
+                document.getElementById('modalManagementOfSchool').textContent = record.managementOfSchool || 'N/A';
+                document.getElementById('modalDateOfAppointment').textContent = record.dateOfAppointment || 'N/A';
+                document.getElementById('modalDateOfJoining').textContent = record.dateOfJoining || 'N/A';
+                document.getElementById('modalRemark').textContent = record.remark || 'N/A';
+                document.getElementById('modalMobileNo').textContent = record.mobileNo || 'N/A';
+                document.getElementById('modalDate').textContent = record.registeredAt;
+                
+                // Show modal
+                const modal = document.getElementById('recordModal');
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            closeModal() {
+                const modal = document.getElementById('recordModal');
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+                this.currentRecord = null;
+            }
+
+            deleteCurrentRecord() {
+                if (!this.currentRecord) return;
+                
+                if (confirm(`Are you sure you want to delete the record for "${this.currentRecord.name}"?`)) {
+                    this.records = this.records.filter(record => record.id !== this.currentRecord.id);
+                    this.saveRecords();
+                    this.renderRecords();
+                    this.updateRecordCount();
+                    this.closeModal();
+                }
+            }
+
+            editRecord() {
+                if (!this.currentRecord) return;
+                
+                // Pre-fill the form with current record data
+                document.getElementById('name').value = this.currentRecord.name;
+                document.getElementById('gender').value = this.currentRecord.gender || '';
+                document.getElementById('fatherName').value = this.currentRecord.fatherName || '';
+                document.getElementById('personalAddress').value = this.currentRecord.personalAddress || this.currentRecord.address || '';
+                document.getElementById('dateOfBirth').value = this.currentRecord.dateOfBirth || '';
+                document.getElementById('educationalQualification').value = this.currentRecord.educationalQualification || '';
+                document.getElementById('subjectTaught').value = this.currentRecord.subjectTaught || '';
+                document.getElementById('designation').value = this.currentRecord.designation;
+                document.getElementById('status').value = this.currentRecord.status || '';
+                document.getElementById('nameOfWorkplace').value = this.currentRecord.nameOfWorkplace || '';
+                document.getElementById('workAddress').value = this.currentRecord.workAddress || '';
+                document.getElementById('managementOfSchool').value = this.currentRecord.managementOfSchool || '';
+                document.getElementById('dateOfAppointment').value = this.currentRecord.dateOfAppointment || '';
+                document.getElementById('dateOfJoining').value = this.currentRecord.dateOfJoining || '';
+                document.getElementById('remark').value = this.currentRecord.remark || '';
+                document.getElementById('mobileNo').value = this.currentRecord.mobileNo || '';
+                
+                // Simply set the designation value
+                
+                // Delete the old record
+                this.records = this.records.filter(record => record.id !== this.currentRecord.id);
+                this.saveRecords();
+                this.renderRecords();
+                this.updateRecordCount();
+                
+                // Close modal and scroll to form
+                this.closeModal();
+                document.querySelector('.form-section').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('name').focus();
+            }
+
+            deleteRecord(id) {
+                if (confirm('Are you sure you want to delete this record?')) {
+                    this.records = this.records.filter(record => record.id !== id);
+                    this.saveRecords();
+                    this.renderRecords();
+                    this.updateRecordCount();
+                }
+            }
+
+            updateRecordCount() {
+                document.getElementById('recordCount').textContent = this.records.length;
+            }
+
+            saveRecords() {
+                localStorage.setItem('registrationRecords', JSON.stringify(this.records));
+            }
+
+            loadRecords() {
+                const saved = localStorage.getItem('registrationRecords');
+                return saved ? JSON.parse(saved) : [];
+            }
+
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Export functionality
+            exportToCSV() {
+                if (this.records.length === 0) {
+                    alert('No records to export!');
+                    return;
+                }
+
+                const headers = ['Name', 'Gender', 'Father Name', 'Personal Address', 'Designation', 'Mobile No', 'Registered Date'];
+                const csvContent = [
+                    headers.join(','),
+                    ...this.records.map(record => [
+                        `"${record.name}"`,
+                        `"${record.gender || 'N/A'}"`,
+                        `"${record.fatherName || 'N/A'}"`,
+                        `"${(record.personalAddress || record.address || 'N/A').replace(/\n/g, ' ')}"`,
+                        `"${record.designation}"`,
+                        `"${record.mobileNo || 'N/A'}"`,
+                        `"${record.registeredAt}"`
+                    ].join(','))
+                ].join('\n');
+
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `registrations_${new Date().toISOString().split('T')[0]}.csv`;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            }
+
+            // Clear all records
+            clearAllRecords() {
+                if (confirm('Are you sure you want to delete all records? This cannot be undone.')) {
+                    this.records = [];
+                    this.saveRecords();
+                    this.renderRecords();
+                    this.updateRecordCount();
+                }
+            }
+        }
+
+        // Initialize the app
+        const app = new RegistrationApp();
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            // Ctrl+Enter to submit form
+            if (e.ctrlKey && e.key === 'Enter') {
+                const modal = document.getElementById('recordModal');
+                if (!modal.classList.contains('active')) {
+                    document.getElementById('registrationForm').dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+
+        // Auto-save form data as user types (draft functionality)
+        const formInputs = ['name', 'gender', 'fatherName', 'personalAddress', 'educationalQualification', 'subjectTaught', 'designation', 'status', 'nameOfWorkplace', 'managementOfSchool', 'mobileNo'];
+        formInputs.forEach(inputId => {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.addEventListener('input', () => {
+                    const draftData = {};
+                    formInputs.forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element && !element.disabled) {
+                            draftData[id] = element.value;
+                        }
+                    });
+                    localStorage.setItem('registrationDraft', JSON.stringify(draftData));
+                });
+            }
+        });
+
+        // Load draft data on page load
+        window.addEventListener('load', () => {
+            const draftData = localStorage.getItem('registrationDraft');
+            if (draftData) {
+                const draft = JSON.parse(draftData);
+                Object.keys(draft).forEach(inputId => {
+                    const input = document.getElementById(inputId);
+                    if (input && draft[inputId]) {
+                        input.value = draft[inputId];
+                    }
+                });
+            }
+        });
+
+        // Clear draft after successful submission
+        document.getElementById('registrationForm').addEventListener('submit', () => {
+            localStorage.removeItem('registrationDraft');
+        });
+    </script>
+</body>
+</html>
